@@ -1,0 +1,21 @@
+{
+  "name": "web-digit-recognizer",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "./src/js/index.ts",
+  "scripts": {
+    "start": "webpack-dev-server --config ./webpack.common.config.js -w"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "^3.2.2",
+    "css-loader": "^0.28.4",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "file-loader": "^0.11.2",
+    "html-webpack-plugin": "^2.30.1",
+    "source-map-loader": "^0.2.1",
+    "style-loader": "^0.18.2",
+    "typescript": "^2.4.2",
+    "webpack": "^3.4.1",
+    "webpack-dev-server": "^2.6.1"
+  }
+}
