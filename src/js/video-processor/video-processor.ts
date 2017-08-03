@@ -1,10 +1,16 @@
+import { createWebAssembly } from '../wa-initialization/wa-init';
+import * as wasmName from '../../generated/output.wasm';
 const uniqueId = 0;
+
+console.log(wasmName);
 
 export class VideoProcessor extends HTMLElement {
   private ownShadowRoot: ShadowRoot;
   private videoEl: HTMLVideoElement;
   private canvasEl: HTMLCanvasElement;
   private context: CanvasRenderingContext2D;
+  private readyToHandleImages = false;
+  private waAPI: any;
 
   private videoId: string;
   private canvasId: string;
@@ -32,7 +38,7 @@ export class VideoProcessor extends HTMLElement {
   }
 
   private displayOntheCanvas() {
-    
+
     const height = this.videoEl.videoHeight;
     const width = this.videoEl.videoWidth;
     console.log(width, height);
@@ -41,18 +47,28 @@ export class VideoProcessor extends HTMLElement {
 
     this.context.drawImage(this.videoEl, 0, 0, width, height);
     const pixels = this.context.getImageData(0, 0, width, height);
-    //now we can work with those pixels.data each pixel represented by rgba(255, 255, 255, 255);
-    //and then puth them back
-    // this.context.putImageData(pixels, 0, 0);
-    requestAnimationFrame(()=>this.displayOntheCanvas());
+    if (this.readyToHandleImages) {
+      //this.waAPI.
+      //now we can work with those pixels.data each pixel represented by rgba(255, 255, 255, 255);
+      //and then puth them back
+      // this.context.putImageData(pixels, 0, 0);
+    }
+    requestAnimationFrame(() => this.displayOntheCanvas());
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     this.ownShadowRoot = this.attachShadow({ mode: 'open' });
     this.render();
     navigator.mediaDevices.getUserMedia({ video: true, audio: false })
       .then((localMediaStream: MediaStream) => this.permissionGranted(localMediaStream))
       .catch(() => { });
+    try {
+      const wa = await createWebAssembly(wasmName);
+      this.waAPI = wa.instance.exports;
+      this.readyToHandleImages = true;
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {

@@ -4,6 +4,8 @@
   "license": "MIT",
   "main": "./src/js/index.ts",
   "scripts": {
+    "clean-generated": "rm -rf ./src/generated/*.{json,js,wasm}",
+    "build-cpp": "cd ./src/cpp && make",
     "start": "webpack-dev-server --config ./webpack.common.config.js -w"
   },
   "devDependencies": {
